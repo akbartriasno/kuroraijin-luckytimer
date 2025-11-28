@@ -7,7 +7,7 @@ import {fontMono, fontSans} from "@/config/fonts";
 
 export const metadata: Metadata = {
   title: "Kuro Raijin",
-  description: "Kuro Raijin stands as the premium choice for automotive enthusiasts and professionals who demand nothing less than excellence.",
+  description: "Kuro Raijin - Lucky Timer Challenge",
   authors: [{name: "Kuro Raijin 2025 - Akbar Triasno S."}],
   icons: {
     icon: "/images/favicon.png",
