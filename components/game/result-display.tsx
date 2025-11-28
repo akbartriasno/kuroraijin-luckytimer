@@ -9,8 +9,14 @@ interface ResultDisplayProps {
 }
 
 export default function ResultDisplay({ time, isPerfect }: ResultDisplayProps) {
-  const diff = Math.abs(time - 10)
-  const accuracy = Math.max(0, 100 - diff * 10)
+  let accuracy;
+
+  if (Number(time.toFixed(2)) === 10.00) {
+    accuracy = 100;
+  } else {
+    const diff = Math.abs(time - 10);
+    accuracy = Math.max(0, 100 - diff * 10);
+  }
 
   return (
       <motion.div
@@ -47,7 +53,7 @@ export default function ResultDisplay({ time, isPerfect }: ResultDisplayProps) {
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-xs">
                       <span className="text-muted-foreground">Accuracy</span>
-                      <span className="text-accent font-bold">{accuracy.toFixed(0)}%</span>
+                      <span className="text-accent font-bold">{Math.floor(accuracy)}%</span>
                     </div>
                     <Progress
                         value={accuracy}

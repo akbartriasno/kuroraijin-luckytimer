@@ -97,7 +97,7 @@ export default function GameScreen({ onBack }: GameScreenProps) {
     )
   }
 
-  const isPerfect = result !== null && Math.abs(result - 10) < 0.00
+  const isPerfect = result !== null && Number(result.toFixed(2)) === 10.00;
 
   return (
       <div className="h-auto flex flex-col items-center w-full px-4 py-8 relative radial-gradient-bg">
