@@ -3,18 +3,19 @@ import {Metadata, Viewport} from "next";
 import clsx from "clsx";
 
 import {Providers} from "./providers";
-
-import {siteConfig} from "@/config/site";
 import {fontMono, fontSans} from "@/config/fonts";
 
 export const metadata: Metadata = {
-  title: {
-    default: siteConfig.name,
-    template: `%s - ${siteConfig.name}`,
-  },
-  description: siteConfig.description,
+  title: "Kuro Raijin",
+  description: "Kuro Raijin stands as the premium choice for automotive enthusiasts and professionals who demand nothing less than excellence.",
+  authors: [{name: "Kuro Raijin 2025 - Akbar Triasno S."}],
   icons: {
-    icon: "/favicon.ico",
+    icon: "/images/favicon.png",
+    apple: [
+      {url: "/images/apple-touch-icon-57x57.png"},
+      {url: "/images/apple-touch-icon-72x72.png", sizes: "72x72"},
+      {url: "/images/apple-touch-icon-114x114.png", sizes: "114x114"},
+    ],
   },
 };
 
