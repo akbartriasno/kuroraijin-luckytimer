@@ -15,11 +15,13 @@ export default function GameScreen({ onBack }: GameScreenProps) {
   const [time, setTime] = useState(0)
   const [isRunning, setIsRunning] = useState(false)
   const [result, setResult] = useState<number | null>(null)
-  const [attempt, setAttempt] = useState(1)
+  const [attempt, setAttempt] = useState(0)
   const [history, setHistory] = useState<number[]>([])
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
-  const MAX_ATTEMPTS = 5
+  const MAX_ATTEMPTS = 1
+  const IS_ADMIN = false
+  const IS_ATTEMPT_HISTORY = false
 
   useEffect(() => {
     if (isRunning) {
@@ -45,6 +47,7 @@ export default function GameScreen({ onBack }: GameScreenProps) {
   const handleStart = () => {
     setTime(0)
     setResult(null)
+    setAttempt(attempt + 1)
     setIsRunning(true)
   }
 
@@ -53,10 +56,6 @@ export default function GameScreen({ onBack }: GameScreenProps) {
     const roundedTime = Math.round(time * 100) / 100
     setResult(roundedTime)
     setHistory([...history, roundedTime])
-
-    if (attempt < MAX_ATTEMPTS) {
-      setAttempt(attempt + 1)
-    }
   }
 
   const handleReset = () => {
@@ -72,7 +71,33 @@ export default function GameScreen({ onBack }: GameScreenProps) {
     onBack()
   }
 
-  const isPerfect = result !== null && Math.abs(result - 10) < 0.05
+  const buttonRetryOrStop = (att: number) => {
+    if (att >= MAX_ATTEMPTS) {
+      return (
+          <motion.button
+              className="px-8 py-3 border-2 border-accent rounded-lg hover:bg-accent/10 transition-all duration-300"
+              whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(255, 46, 46, 0.5)" }}
+              whileTap={{ scale: 0.95 }}
+              disabled={true}
+          >
+            <span className="text-lg font-bold text-accent uppercase tracking-wider">credit has run out</span>
+          </motion.button>
+      )
+    }
+
+    return (
+        <motion.button
+            onClick={handleStart}
+            className="px-8 py-3 border-2 border-accent rounded-lg hover:bg-accent/10 transition-all duration-300"
+            whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(255, 46, 46, 0.5)" }}
+            whileTap={{ scale: 0.95 }}
+        >
+          <span className="text-lg font-bold text-accent uppercase tracking-wider">retry</span>
+        </motion.button>
+    )
+  }
+
+  const isPerfect = result !== null && Math.abs(result - 10) < 0.00
 
   return (
       <div className="h-auto flex flex-col items-center w-full px-4 py-8 relative radial-gradient-bg">
@@ -133,16 +158,7 @@ export default function GameScreen({ onBack }: GameScreenProps) {
                 >
                   <span className="text-lg font-bold text-accent uppercase tracking-wider">STOP</span>
                 </motion.button>
-            ) : (
-                <motion.button
-                    onClick={handleStart}
-                    className="px-8 py-3 border-2 border-accent rounded-lg hover:bg-accent/10 transition-all duration-300"
-                    whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(255, 46, 46, 0.5)" }}
-                    whileTap={{ scale: 0.95 }}
-                >
-                  <span className="text-lg font-bold text-accent uppercase tracking-wider">RETRY</span>
-                </motion.button>
-            )}
+            ) : buttonRetryOrStop(attempt)}
 
             {result !== null && (
               <motion.div
@@ -155,7 +171,7 @@ export default function GameScreen({ onBack }: GameScreenProps) {
               </motion.div>
             )}
 
-            {result !== null && attempt >= MAX_ATTEMPTS && (
+            {result !== null && attempt >= MAX_ATTEMPTS && IS_ADMIN && (
                 <motion.button
                     onClick={handleReset}
                     className="px-6 py-2 border-2 border-accent rounded-lg hover:bg-accent/10 transition-all duration-300 text-accent text-sm font-bold uppercase tracking-wider"
@@ -167,7 +183,7 @@ export default function GameScreen({ onBack }: GameScreenProps) {
             )}
           </div>
 
-          {history.length > 0 && (
+          {history.length > 0 && IS_ATTEMPT_HISTORY && (
               <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
